@@ -1,0 +1,50 @@
+#!/usr/bin/env ruby
+$:.push(File.expand_path("../../lib", __FILE__))
+require "anywhere"
+require "anywhere/ssh"
+RUNNER = Anywhere::SSH.new(host = "test.host", user = "root")
+RUNNER.logger.prefix = "[" + RUNNER.host + "]"
+
+hosts = []
+require "optparse"
+opts = OptionParser.new do |o|
+  o.on("-h HOSTS", "--hosts", Array) do |values|
+    hosts = values
+  end
+end
+
+opts.parse(ARGV)
+
+names = []
+RUNNERS = hosts.map do |host|
+  name, user = host.split("@").reverse
+  user ||= "root"
+  names << name
+  Anywhere::SSH.new(name, user)
+end
+
+max_name = names.sort_by(&:length).last.length
+
+RUNNERS.each do |runner|
+  runner.logger.prefix = "[%0#{max_name}s]" % [runner.host]
+end
+
+def _(*args)
+  RUNNERS.map do |runner|
+    Thread.new do
+      begin
+        runner.execute(args.join(" "))
+      rescue Anywhere::ExecutionError => err
+        err.result
+      end
+    end
+  end.map(&:join).map(&:value)
+end
+
+begin
+  puts "hosts: #{RUNNERS.map(&:host).join(",")}"
+  puts %(usage: _"ls -la")
+  require "pry"
+  pry.binding
+rescue SystemExit, NoMethodError
+end
