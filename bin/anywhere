@@ -6,17 +6,8 @@ RUNNER = Anywhere::SSH.new(host = "test.host", user = "root")
 RUNNER.logger.prefix = "[" + RUNNER.host + "]"
 
 hosts = []
-require "optparse"
-opts = OptionParser.new do |o|
-  o.on("-h HOSTS", "--hosts", Array) do |values|
-    hosts = values
-  end
-end
-
-opts.parse(ARGV)
-
 names = []
-RUNNERS = hosts.map do |host|
+RUNNERS = ARGV.map do |host|
   name, user = host.split("@").reverse
   user ||= "root"
   names << name
