@@ -8,8 +8,8 @@ Gem::Specification.new do |spec|
   spec.version       = Anywhere::VERSION
   spec.authors       = ["Tobias Schwab"]
   spec.email         = ["tobias.schwab@dynport.de"]
-  spec.description   = %q{Transparent system access}
-  spec.summary       = %q{Transparent system access}
+  spec.description   = %q{Simple wrapper for Net/SSH}
+  spec.summary       = %q{Simple wrapper for Net/SSH}
   spec.homepage      = ""
   spec.license       = "MIT"
 
