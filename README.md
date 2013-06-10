@@ -1,6 +1,6 @@
 # Anywhere
 
-TODO: Write a gem description
+Simple wrapper for Net/SSH.
 
 ## Installation
 
@@ -24,7 +24,6 @@ Or install it yourself as:
     pry> ssh.execute("uptime")
     => <run_time=0.659416, cmd=<uptime>, stdout=<1 lines, 61 chars>, stderr=<empty>, exit_status=0>
 
-
 ### From command line
 
     $ anywhere root@host1 root@host2
@@ -35,7 +34,6 @@ Or install it yourself as:
     => [<run_time=0.06875, cmd=<uptime>, stdout=<1 lines, 72 chars>, stderr=<empty>, exit_status=0>,
      <run_time=0.067885, cmd=<uptime>, stdout=<1 lines, 72 chars>, stderr=<empty>, exit_status=0>]
 
-    pry>
 ## Contributing
 
 1. Fork it
