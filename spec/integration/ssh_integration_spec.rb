@@ -32,27 +32,27 @@ describe "SSH integration spec" do
   end
 
   describe "#home_dir" do
-    it { runner.home_dir.should eq("/home/vagrant") }
+    it { runner.home_dir.should eq("/root") }
   end
 
   describe "#extract_tar" do
     let(:path) { FIXTURES_PATH.join("arch.tgz") }
 
     it "extracts the provided path" do
-      runner.extract_tar(path, "/tmp/urknall/tar")
-      runner.execute("ls /tmp/urknall/tar").stdout.split("\n").should eq(["a.txt", "b.txt"])
-      runner.execute("cat /tmp/urknall/tar/a.txt").stdout.should eq("this is a\n")
+      runner.extract_tar(path, "/tmp/anywhere/tar")
+      runner.execute("ls /tmp/anywhere/tar").stdout.split("\n").should eq(["a.txt", "b.txt"])
+      runner.execute("cat /tmp/anywhere/tar/a.txt").stdout.should eq("this is a\n")
     end
   end
 
   describe "#mkdir_p" do
     before :each do
-      @runner.execute("rm -Rf /tmp/urknall")
+      @runner.execute("rm -Rf /tmp/anywhere")
     end
 
     it "should create a new directory" do
-      @runner.mkdir_p("mkdir -p /tmp/urknall/test")
-      @runner.execute("file /tmp/urknall/test").stdout.should include("/tmp/urknall/test: directory")
+      @runner.mkdir_p("mkdir -p /tmp/anywhere/test")
+      @runner.execute("file /tmp/anywhere/test").stdout.should include("/tmp/anywhere/test: directory")
     end
   end
 

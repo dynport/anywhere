@@ -77,7 +77,7 @@ module Anywhere
         end
       end
       logger.info "writing #{content.length} bytes to #{path} (md5: #{md5})"
-      tmp_path = "/opt/urknall/tmp/files.#{md5}"
+      tmp_path = "/tmp/anywhere/files.#{md5}"
       execute("#{sudo_cmd} mkdir -p #{File.dirname(tmp_path)}")
       execute("#{sudo_cmd} chown #{whoami} #{File.dirname(tmp_path)}")
       logger.debug "writing to #{tmp_path}"
