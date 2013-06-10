@@ -16,8 +16,9 @@ describe "SSH integration spec" do
   end
 
   before :all do
-    @user = "vagrant"
-    host = "192.168.34.12"
+    @user = "root"
+    host = ENV["SSH_TEST_HOST"]
+    raise %(ENV["SSH_TEST_HOST"] must be set) if host.nil?
     port = 22
 
     @runner = Anywhere::SSH.new(host, @user, port: port)

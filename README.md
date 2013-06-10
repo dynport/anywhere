@@ -34,6 +34,11 @@ Or install it yourself as:
     => [<run_time=0.06875, cmd=<uptime>, stdout=<1 lines, 72 chars>, stderr=<empty>, exit_status=0>,
      <run_time=0.067885, cmd=<uptime>, stdout=<1 lines, 72 chars>, stderr=<empty>, exit_status=0>]
 
+## Running the specs
+
+For the ssh integration rest you need to have some host (could be your local vagrant) you can access as root. This host must be
+set in the `SSH_TEST_HOST` instance variable.
+
 ## Contributing
 
 1. Fork it
