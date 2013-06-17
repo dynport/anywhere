@@ -2,11 +2,12 @@ require "spec_helper"
 require "anywhere/local"
 
 describe "Anywhere::Local" do
-  before do
-    Anywhere.stub(:logger) { double("logger", error: true, info: true) }
+  subject(:local) do
+    local = Anywhere::Local.new
+    local.logger.stub(:stream) { StringIO.new }
+    local
   end
 
-  subject(:local) { Anywhere::Local.new }
   it { should_not be_nil }
 
   describe "whoami" do
@@ -20,6 +21,19 @@ describe "Anywhere::Local" do
     it { should be_kind_of(Anywhere::Result) }
     it { subject.exit_status.should eq(0) }
     it { subject.stdout.should be_kind_of(String) }
+
+    describe "#capture" do
+      subject(:str) do
+        io = StringIO.new
+        local.logger.unstub(:stream) { StringIO.new }
+        local.execute("cat anywhere.gemspec", nil, io)
+        io.rewind
+        io.read
+      end
+
+      it { str.should be_kind_of(String) }
+      it { str.length.should_not eq(0) }
+    end
 
     describe "with command raising an error" do
       subject(:error) do

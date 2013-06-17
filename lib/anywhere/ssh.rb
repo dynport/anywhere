@@ -14,7 +14,7 @@ module Anywhere
       @attributes = attributes.merge(paranoid: false)
     end
 
-    def do_execute(cmd, stdin = nil)
+    def do_execute(cmd, stdin = nil, stdout = nil)
       result = Result.new(cmd)
       result.started!
       ssh.open_channel do |ch|
@@ -22,7 +22,11 @@ module Anywhere
           raise "could not execute command" unless success
           ch.on_data do |ch, data|
             result.add_stdout data
-            yield(:stdout, data) if block_given?
+            if stdout
+              stdout << data
+            elsif block_given?
+              yield(:stdout, data)
+            end
           end
 
           ch.on_extended_data do |ch, type, data|

@@ -13,12 +13,19 @@ module Anywhere
       whoami == "root"
     end
 
-    def execute(cmd, stdin = nil)
-      do_execute(cmd, stdin) do |stream, data|
+    def capture(path)
+      io = StringIO.new
+      execute("cat #{path}", nil, io)
+      io.rewind
+      io.read
+    end
+
+    def execute(cmd, stdin = nil, stdout = nil)
+      do_execute(cmd, stdin, stdout) do |stream, data|
         data.split("\n").each do |line|
           if stream == :stderr
             logger.error line
-          else
+          elsif !stdout
             logger.debug line
           end
         end

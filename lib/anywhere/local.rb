@@ -5,7 +5,7 @@ require "anywhere/base"
 
 module Anywhere
   class Local < Base
-    def do_execute(cmd, stdin_data = nil)
+    def do_execute(cmd, stdin_data = nil, stdout_io = nil)
       require "open3"
       result = Result.new(cmd)
       result.started!
@@ -19,10 +19,14 @@ module Anywhere
             stream.each do |line|
               if stream == stdout
                 result.add_stdout(line.strip)
-                logger.info(line) if logger
+                if stdout_io
+                  stdout_io << line
+                else
+                  logger.debug(line)
+                end
               elsif stream == stderr
                 result.add_stderr(line.strip)
-                logger.error(line) if logger
+                logger.error(line)
               end
             end
           end

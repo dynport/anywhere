@@ -57,12 +57,33 @@ describe "SSH integration spec" do
     end
   end
 
+  describe "#capture" do
+    subject(:str) do
+      runner.capture("/etc/passwd")
+    end
+
+    it { should be_kind_of(String) }
+    it { should start_with("root") }
+  end
+
   describe "#execute" do
     subject { runner.execute("uptime") }
     it { should be_kind_of(Anywhere::Result) }
     it { subject.stdout.should be_kind_of(String) }
     it { subject.stdout.should include("load average") }
     it { subject.stderr.length.should eq(0) }
+
+    describe "capturing" do
+      subject(:str) do
+        io = StringIO.new
+        runner.execute("cat /etc/passwd", nil, io)
+        io.rewind
+        io.read
+      end
+
+      it { str.should be_kind_of(String) }
+      it { str.length.should_not eq(0) }
+    end
 
     describe "with unknwon command" do
       subject(:error) do
