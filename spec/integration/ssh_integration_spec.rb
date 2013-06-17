@@ -64,6 +64,15 @@ describe "SSH integration spec" do
 
     it { should be_kind_of(String) }
     it { should start_with("root") }
+
+    describe "compressed" do
+      subject(:str) do
+        runner.capture("/etc/passwd", compressed = true)
+      end
+
+      it { should be_kind_of(String) }
+      it { should start_with("root") }
+    end
   end
 
   describe "#execute" do

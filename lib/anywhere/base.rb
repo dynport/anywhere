@@ -13,11 +13,30 @@ module Anywhere
       whoami == "root"
     end
 
-    def capture(path)
+    def capture(path, compressed = false)
       io = StringIO.new
-      execute("cat #{path}", nil, io)
+      cmd = "cat #{path}"
+      cmd << " | gzip " if compressed
+      execute(cmd, nil, io)
       io.rewind
-      io.read
+      out = io.read
+      if compressed
+        # not sure why this is not working with the uncompress method
+        out, s = Open3.capture2("cat - | gunzip", stdin_data: out)
+        out
+      else
+        out
+      end
+    end
+
+    def uncompress(string)
+      require "zlib"
+      require "base64"
+      zstream = Zlib::Inflate.new
+      buf = zstream.inflate(string)
+      zstream.finish
+      zstream.close
+      buf
     end
 
     def execute(cmd, stdin = nil, stdout = nil)
