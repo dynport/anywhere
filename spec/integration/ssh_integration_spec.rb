@@ -136,6 +136,12 @@ describe "SSH integration spec" do
     subject { runner.write_file(@path, "hello world") }
     it { should be_success }
     it { runner.execute("cat #{@path}").stdout.should eq("hello world") }
+
+    it "should overwrite files" do
+      runner.write_file(@path, "hello world")
+      runner.write_file(@path, "hello world2")
+      runner.capture(@path).should eq("hello world2")
+    end
   end
 
   describe "write big files" do

@@ -120,7 +120,7 @@ module Anywhere
       logger.debug "moving #{tmp_path} to #{path}"
       if file_exists?(path)
         logger.debug "diff #{path} #{tmp_path}"
-        execute("diff #{tmp_path} #{path}").stdout.split("\n").each do |line|
+        execute("diff #{tmp_path} #{path}; /bin/true").stdout.split("\n").each do |line|
           logger.debug line
         end
       end
